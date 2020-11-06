@@ -1,9 +1,9 @@
 // If you don't want to use TypeScript you can delete this file!
-import React from "react"
+import React , { useState, useEffect } from "react"
 import { PageProps, Link, graphql } from "gatsby"
-
-import Layout from "../components/layout"
-import SEO from "../components/seo"
+import 'bootstrap/dist/css/bootstrap.css';
+import './vogd.css';
+import Neo4jD3 from "../lib/graph"
 
 type DataProps = {
   site: {
@@ -11,17 +11,98 @@ type DataProps = {
   }
 }
 
-const UsingTypescript: React.FC<PageProps<DataProps>> = ({ data, path }) => (
-  <Layout>
-    <SEO title="Using TypeScript" />
-    <h1>Gatsby supports TypeScript by default!</h1>
-    <p>This means that you can create and write <em>.ts/.tsx</em> files for your pages, components etc. Please note that the <em>gatsby-*.js</em> files (like gatsby-node.js) currently don't support TypeScript yet.</p>
-    <p>For type checking you'll want to install <em>typescript</em> via npm and run <em>tsc --init</em> to create a <em>.tsconfig</em> file.</p>
-    <p>You're currently on the page "{path}" which was built on {data.site.buildTime}.</p>
-    <p>To learn more, head over to our <a href="https://www.gatsbyjs.com/docs/typescript/">documentation about TypeScript</a>.</p>
-    <Link to="/">Go back to the homepage</Link>
-  </Layout>
-)
+const UsingTypescript: React.FC<PageProps<DataProps>> = ({ data, path }) => {
+
+  useEffect(() => {
+     Neo4jD3('#neo4jd3', {
+      highlight: [
+          {
+              class: 'Project',
+              property: 'name',
+              value: 'neo4jd3'
+          }, {
+              class: 'User',
+              property: 'userId',
+              value: 'eisman'
+          }
+      ],
+      icons: {
+//                        'Address': 'home',
+          'Api': 'gear',
+//                        'BirthDate': 'birthday-cake',
+          'Cookie': 'paw',
+//                        'CreditCard': 'credit-card',
+//                        'Device': 'laptop',
+          'Email': 'at',
+          'Git': 'git',
+          'Github': 'github',
+          'Google': 'google',
+//                        'icons': 'font-awesome',
+          'Ip': 'map-marker',
+          'Issues': 'exclamation-circle',
+          'Language': 'language',
+          'Options': 'sliders',
+          'Password': 'lock',
+          'Phone': 'phone',
+          'Project': 'folder-open',
+          'SecurityChallengeAnswer': 'commenting',
+          'User': 'user',
+          'zoomFit': 'arrows-alt',
+          'zoomIn': 'search-plus',
+          'zoomOut': 'search-minus'
+      },
+      images: {
+          'Address': 'img/twemoji/1f3e0.svg',
+//                        'Api': 'img/twemoji/1f527.svg',
+          'BirthDate': 'img/twemoji/1f382.svg',
+          'Cookie': 'img/twemoji/1f36a.svg',
+          'CreditCard': 'img/twemoji/1f4b3.svg',
+          'Device': 'img/twemoji/1f4bb.svg',
+          'Email': 'img/twemoji/2709.svg',
+          'Git': 'img/twemoji/1f5c3.svg',
+          'Github': 'img/twemoji/1f5c4.svg',
+          'icons': 'img/twemoji/1f38f.svg',
+          'Ip': 'img/twemoji/1f4cd.svg',
+          'Issues': 'img/twemoji/1f4a9.svg',
+          'Language': 'img/twemoji/1f1f1-1f1f7.svg',
+          'Options': 'img/twemoji/2699.svg',
+          'Password': 'img/twemoji/1f511.svg',
+//                        'Phone': 'img/twemoji/1f4de.svg',
+          'Project': 'img/twemoji/2198.svg',
+          'Project|name|neo4jd3': 'img/twemoji/2196.svg',
+//                        'SecurityChallengeAnswer': 'img/twemoji/1f4ac.svg',
+          'User': 'img/twemoji/1f600.svg'
+//                        'zoomFit': 'img/twemoji/2194.svg',
+//                        'zoomIn': 'img/twemoji/1f50d.svg',
+//                        'zoomOut': 'img/twemoji/1f50e.svg'
+      },
+      minCollision: 60,
+      neo4jDataUrl: 'https://eisman.github.io/neo4jd3/json/neo4jData.json',
+      nodeRadius: 25,
+      onNodeDoubleClick: function(node) {
+          switch(node.id) {
+              case '25':
+                  // Google
+                  window.open(node.properties.url, '_blank');
+                  break;
+              default:
+                  var maxNodes = 5,
+                      data = neo4jd3.randomD3Data(node, maxNodes);
+                  neo4jd3.updateWithD3Data(data);
+                  break;
+          }
+      },
+      onRelationshipDoubleClick: function(relationship) {
+          console.log('double click on relationship: ' + JSON.stringify(relationship));
+      },
+      zoomFit: true
+  });
+  })
+
+  return (
+    <div id="neo4jd3"></div>
+  )
+}
 
 export default UsingTypescript
 
